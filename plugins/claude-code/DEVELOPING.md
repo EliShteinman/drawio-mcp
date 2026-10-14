@@ -54,7 +54,7 @@ A `.drawio` file is native mxGraphModel XML. The skill produces one two ways: **
 
 ## References
 
-Shared references live at the repo root (single source of truth for all prompts); `SKILL.md` fetches each via its GitHub raw URL so they work after install without copying extra files:
+Shared references live at the repo root (single source of truth for all prompts). This fork bundles copies in `skills/drawio/references/` (refresh with `scripts/sync-skill-references.sh`) and `SKILL.md` reads them locally, so the skill works offline:
 
 - `shared/xml-essentials.md` — the condensed XML rules (used when authoring XML)
 - `shared/xml-reference.md` — the full XML generation guide (only for layers, tags, metadata, tables, cross-functional grids, dark-mode colors)

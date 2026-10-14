@@ -100,9 +100,9 @@ Skip it after a flow/tree preset — those already route their edges.
 
 ## Mermaid syntax reference
 
-When authoring Mermaid, fetch and follow the shared Mermaid reference (all supported diagram types plus flowchart styling — `style`, `classDef`, `linkStyle`):
+When authoring Mermaid, read and follow the bundled Mermaid reference (all supported diagram types plus flowchart styling — `style`, `classDef`, `linkStyle`). It ships with this skill, so no network access is needed:
 
-https://raw.githubusercontent.com/jgraph/drawio-mcp/main/shared/mermaid-reference.md
+`references/mermaid-reference.md` (relative to this skill's directory)
 
 Match the language of the diagram labels to the user's language.
 
@@ -130,6 +130,8 @@ If no format is mentioned, just produce the `.drawio` file and open it in draw.i
 PNG, SVG, and PDF all support `--embed-diagram` — the exported file contains the full diagram XML, so opening it in draw.io recovers the editable diagram.
 
 ## Browser URL output
+
+**`url` mode needs internet access** (it opens `app.diagrams.net`). On an offline / air-gapped machine, do not use it: deliver a `.drawio` file (or a PNG/SVG/PDF export) instead and tell the user `url` mode is unavailable offline.
 
 When the user requests `url` format, generate a draw.io URL that opens the diagram directly in the browser editor at `app.diagrams.net` — no draw.io Desktop required to *view* it. (Mermaid-authored diagrams still need the desktop CLI to convert to `.drawio` first; if no CLI is available, author the diagram as XML and build the URL from that.)
 
@@ -435,11 +437,13 @@ fs.writeFileSync(file, xml);
 
 ## XML reference
 
-Before authoring XML, fetch and follow the condensed XML rules — skeleton, vertex and edge templates, labels, shapes, the layout grid, containers, swimlanes and edge styles:
-https://raw.githubusercontent.com/jgraph/drawio-mcp/main/shared/xml-essentials.md
+Before authoring XML, read and follow the bundled condensed XML rules — skeleton, vertex and edge templates, labels, shapes, the layout grid, containers, swimlanes and edge styles:
+`references/xml-essentials.md` (relative to this skill's directory)
 
-They cover most diagrams. Only when a diagram needs layers, tags, metadata and placeholders, tables, cross-functional grids or dark-mode colors, also fetch the full XML reference (it describes the draw.io MCP servers, so where it mentions their `search_shapes` tool or `postLayout` / `routing` options, use the CLI's [`--layout`](#elk-layout-for-xml) here instead):
-https://raw.githubusercontent.com/jgraph/drawio-mcp/main/shared/xml-reference.md
+They cover most diagrams. Only when a diagram needs layers, tags, metadata and placeholders, tables, cross-functional grids or dark-mode colors, also read the full XML reference (it describes the draw.io MCP servers, so where it mentions their `search_shapes` tool or `postLayout` / `routing` options, use the CLI's [`--layout`](#elk-layout-for-xml) here instead):
+`references/xml-reference.md` (relative to this skill's directory). The complete style reference and XML schema it points to are bundled alongside it: `references/style-reference.md`, `references/mxfile.xsd`.
+
+All references are local files. Never fetch them from GitHub — this skill must work on machines with no internet access.
 
 ## Troubleshooting
 

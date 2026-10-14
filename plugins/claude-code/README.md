@@ -42,6 +42,38 @@ claude --plugin-dir ./plugins/claude-code
 
 The plugin loads the `drawio` skill from `skills/drawio/SKILL.md` — nothing else needs to be copied into your `~/.claude/skills/` directory.
 
+## Offline / air-gapped installation
+
+This fork bundles every reference the skill reads (`skills/drawio/references/`), so the skill makes **no network calls** — except `url` output mode, which opens `app.diagrams.net` and is unavailable offline.
+
+**On a machine with internet:**
+
+```bash
+git clone https://github.com/EliShteinman/drawio-mcp.git
+# Download the draw.io Desktop installer for the target OS from
+# https://github.com/jgraph/drawio-desktop/releases (e.g. the .rpm for RHEL, .exe for Windows)
+```
+
+Transfer the `drawio-mcp` folder and the installer to the offline machine.
+
+**On the offline machine:**
+
+1. Install draw.io Desktop (needed for Mermaid conversion, ELK layout and PNG/SVG/PDF export):
+   ```bash
+   sudo dnf install ./drawio-*.rpm      # RHEL; check dependencies first with: rpm -qpR drawio-*.rpm
+   which drawio
+   ```
+   On a headless server the CLI needs a virtual display: `xvfb-run drawio ...` (add `--no-sandbox` when running as root).
+2. Add the plugin from the local folder, inside Claude Code:
+   ```
+   /plugin marketplace add /path/to/drawio-mcp
+   /plugin install drawio@drawio
+   ```
+   Or load it per session: `claude --plugin-dir /path/to/drawio-mcp/plugins/claude-code`
+3. Test: `/drawio:drawio png flowchart for user login` → `login-flow.drawio.png`
+
+**Updating from upstream:** after merging `jgraph/drawio-mcp`, run `./scripts/sync-skill-references.sh` to refresh the bundled references. It fails if an upstream `SKILL.md` change reintroduced a GitHub fetch.
+
 ## Usage
 
 In most cases you don't type a command at all — just ask Claude Code for a diagram ("draw a flowchart for user login") and the skill triggers automatically from its description. To invoke it explicitly, Claude Code namespaces plugin skills as `/<plugin>:<skill>`, so the command is `/drawio:drawio`:
@@ -85,7 +117,7 @@ The `.drawio.*` double extension signals that the file contains embedded diagram
 
 ## References
 
-The skill fetches shared guides from GitHub at runtime — the single source of truth for all draw.io MCP prompts across the repository. No extra files need to be copied during installation.
+The skill reads its guides from the bundled `skills/drawio/references/` folder (copies of `shared/`, kept in sync by `scripts/sync-skill-references.sh`), so it needs no network access.
 
 - [`shared/xml-essentials.md`](../../shared/xml-essentials.md) — the condensed XML rules (skeleton, cell templates, labels, shapes, the layout grid, containers, swimlanes, edge styles), used when authoring XML
 - [`shared/xml-reference.md`](../../shared/xml-reference.md) — the full XML reference, fetched only for layers, tags, metadata, tables, cross-functional grids and dark-mode colors
