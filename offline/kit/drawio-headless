@@ -1,0 +1,13 @@
+#!/bin/bash
+# Installed as /usr/local/bin/drawio: runs draw.io through xvfb-run when there
+# is no display, and adds --no-sandbox only as root or when user namespaces
+# (which Chromium's sandbox needs) are disabled.
+DRAWIO_BIN=/opt/drawio/drawio
+EXTRA_ARGS=()
+if [ "$(id -u)" -eq 0 ] || ! unshare --user --map-root-user true 2>/dev/null; then
+  EXTRA_ARGS+=(--no-sandbox)
+fi
+if [ -z "${DISPLAY:-}" ] && [ -z "${WAYLAND_DISPLAY:-}" ]; then
+  exec xvfb-run -a "$DRAWIO_BIN" "${EXTRA_ARGS[@]}" --disable-gpu "$@"
+fi
+exec "$DRAWIO_BIN" "${EXTRA_ARGS[@]}" "$@"

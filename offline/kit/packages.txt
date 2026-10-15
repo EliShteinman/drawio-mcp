@@ -1,0 +1,6 @@
+xorg-x11-server-Xvfb
+xorg-x11-xauth
+dejavu-sans-fonts
+liberation-sans-fonts
+alsa-lib
+mesa-libgbm
