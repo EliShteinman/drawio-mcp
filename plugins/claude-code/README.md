@@ -46,31 +46,7 @@ The plugin loads the `drawio` skill from `skills/drawio/SKILL.md` — nothing el
 
 This fork bundles every reference the skill reads (`skills/drawio/references/`), so the skill makes **no network calls** — except `url` output mode, which opens `app.diagrams.net` and is unavailable offline.
 
-**On a machine with internet:**
-
-```bash
-git clone https://github.com/EliShteinman/drawio-mcp.git
-# Download the draw.io Desktop installer for the target OS from
-# https://github.com/jgraph/drawio-desktop/releases (e.g. the .rpm for RHEL, .exe for Windows)
-```
-
-Transfer the `drawio-mcp` folder and the installer to the offline machine.
-
-**On the offline machine:**
-
-1. Install draw.io Desktop (needed for Mermaid conversion, ELK layout and PNG/SVG/PDF export):
-   ```bash
-   sudo dnf install ./drawio-*.rpm      # RHEL; check dependencies first with: rpm -qpR drawio-*.rpm
-   which drawio
-   ```
-   On a headless server the CLI needs a virtual display: `xvfb-run drawio ...` (add `--no-sandbox` when running as root).
-2. Add the plugin from the local folder, inside Claude Code:
-   ```
-   /plugin marketplace add /path/to/drawio-mcp
-   /plugin install drawio@drawio
-   ```
-   Or load it per session: `claude --plugin-dir /path/to/drawio-mcp/plugins/claude-code`
-3. Test: `/drawio:drawio png flowchart for user login` → `login-flow.drawio.png`
+Full instructions — direct download links, draw.io Desktop with every RHEL 8/9 dependency, GitLab, Windows — are in [`offline/README.md`](../../offline/README.md).
 
 **Updating from upstream:** after merging `jgraph/drawio-mcp`, run `./scripts/sync-skill-references.sh` to refresh the bundled references. It fails if an upstream `SKILL.md` change reintroduced a GitHub fetch.
 
